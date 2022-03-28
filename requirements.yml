@@ -1,1 +1,6 @@
-
+name: test_environment
+channels:
+- conda-forge
+dependencies:
+  - python
+  - numpy
