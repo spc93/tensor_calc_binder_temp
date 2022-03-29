@@ -5,4 +5,3 @@ dependencies:
   - python
   - numpy
   - matplotlib
-  - cctbx
