@@ -1,6 +1,8 @@
-name: test_environment
+name: example-environment
 channels:
-- conda-forge
+  - conda-forge
 dependencies:
   - python
   - numpy
+  - matplotlib
+  - cctbx
