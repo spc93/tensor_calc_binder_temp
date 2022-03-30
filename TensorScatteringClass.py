@@ -3,7 +3,7 @@
 #all_letters now attribute
 #now have glide_screw atribute and message to report presence of glide or screw operators
 
-
+# new version uses cctbx for cif reading instead of old cif loader
 
 
 
@@ -134,7 +134,7 @@ class TensorScatteringClass():
         return (symxyz, sitevec, sitestr)
 
 
-    def symInfoFromCifFile(self, CIFfile, Site):
+    def symInfoFromCifFile_old(self, CIFfile, Site): # old vserion using CifFile - can delete
         try:
             import CifFile
         except:
@@ -163,6 +163,37 @@ class TensorScatteringClass():
         return (symxyz, sitevec, Site, lattice)
 
 
+    def symInfoFromCifFile(self, CIFfile, Site): # new version using cctbx
+        try:
+            import iotbx.cif
+        except:
+            print("=== You need to install the cctbx module (available from conda)")
+
+        
+        self.CIFfile = CIFfile
+        self.Site = Site
+
+        cif_model = iotbx.cif.reader(file_path = CIFfile).model()
+        firstkey = cif_model.keys()[0]
+        cb = self.cifblock = cif_model[firstkey]   # get first block
+        
+        lattice = [float(cb['_cell_length_a'].partition('(')[0]), float(cb['_cell_length_b'].partition('(')[0]), float(cb['_cell_length_c'].partition('(')[0]), float(cb['_cell_angle_alpha'].partition('(')[0]), float(cb['_cell_angle_beta'].partition('(')[0]), float(cb['_cell_angle_gamma'].partition('(')[0])]
+        self.all_labels = ', '.join(cb['_atom_site_label'])
+
+        try:
+            self.atom_index = list(cb['_atom_site_label']).index(Site)
+        except:
+            print("=== Error: site keyword string must be in the atomic site list: " + self.all_labels)
+            return
+        
+        sitevec = np.array([float(cb['_atom_site_fract_x'][self.atom_index].split('(')[0]), float(cb['_atom_site_fract_y'][self.atom_index].split('(')[0]), float(cb['_atom_site_fract_z'][self.atom_index].split('(')[0]) ])
+                
+        try:
+            symxyz=list(cb['_symmetry_equiv_pos_as_xyz'])
+        except:
+            symxyz=list(cb['_space_group_symop_operation_xyz']) #assume this is full group, not just generators
+
+        return (symxyz, sitevec, Site, lattice)
 
 
                 
