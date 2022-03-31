@@ -1,14 +1,4 @@
-#github comments
-#default wyckoff to 'a'
-#all_letters now attribute
-#now have glide_screw atribute and message to report presence of glide or screw operators
-
 # new version uses cctbx for cif reading instead of old cif loader
-
-
-
-
-
 
 import sys, pprint
 from copy import deepcopy
@@ -1589,7 +1579,7 @@ class TensorScatteringClass():
 if __name__ == '__main__':
         import TensorScatteringClass as ten
 
-        
+        '''
         print('=== Trying to load crystal data from CIF file...')
         try:
             t1=ten.TensorScatteringClass(CIFfile='ZnO Kisi et al icsd_67454.cif', Site='Zn1')
@@ -1599,8 +1589,9 @@ if __name__ == '__main__':
             print('=== Success!')
         except:
             print('=== Failed. Maybe CIF file is missing or CifFile module is not installed')
-            
-        print('=== Trying to load crystal data using CCTBX module...')
+        '''
+        
+        print("=== Running test: SG No. 186,  Wyckoff site 'b', E1E2 forbidden reflection (no CIF file needed)")
         try:
             t2=ten.TensorScatteringClass(spacegroup_number = 186, wyckoff_letter = 'b', lattice = [3.25, 3.25, 5.21, 90, 90, 120])
             t2.PlotIntensityInPolarizationChannels('E1E2', lam=12.4/9.659, hkl=np.array([1,1,1]), hkln=np.array([1,0,0]), K=3, Time=1, Parity=-1, mk=None, sk=None, sigmapi='sigma')
